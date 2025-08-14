@@ -21,10 +21,10 @@ const BlogPostForm = dynamic(() => import('../components/form'), {
 });
 
 export const metadata = {
-  title: 'Create AI-Generated Blog Posts',
+  title: 'Blogify',
   description: 'Generate high-quality blog content in seconds with our AI-powered blog generator. Customize tone, length, and topic to your needs.',
   openGraph: {
-    title: 'Create AI-Generated Blog Posts',
+    title: 'Blogify',
     description: 'Generate high-quality blog content in seconds with our AI-powered blog generator.',
   }
 };
