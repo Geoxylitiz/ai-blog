@@ -41,7 +41,7 @@ export async function GET(req){
         }else{
             await connectToDB();
             const blogs = await Blog.find().sort({ createdAt: -1 }).select('title slug createdAt');
-            await redis.setEx('blogs', 3600, JSON.stringify(blogs));
+            await redis.setEx('blogs', 10, JSON.stringify(blogs));
             return NextResponse.json({blogs: blogs })
         }
 
