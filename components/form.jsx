@@ -42,7 +42,7 @@ const BlogPostForm = () => {
         throw new Error(data.error || 'Failed to generate blog post');
       }
       
-      await router.push(`/blog/${data.slug}`);
+       router.push(`/blog/${data.slug}`);
     } catch (err) {
       console.error("Error:", err);
       setError(err.message || 'Failed to generate blog post. Please try again.');
@@ -52,7 +52,7 @@ const BlogPostForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow rounded">
+    <div className="max-w-md mx-auto p-6 bg-white shadow rounded mt-10">
       <h1 className="text-2xl font-bold mb-4 text-center">Blog Post Generator</h1>
       
       {error && (

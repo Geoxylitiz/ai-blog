@@ -1,24 +1,5 @@
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
-
-// Dynamic import with code splitting
-const BlogPostForm = dynamic(() => import('../components/form'), {
-  loading: () => <div className="max-w-md mx-auto p-6 bg-white shadow rounded">
-    <div className="animate-pulse">
-      <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
-      <div className="space-y-4">
-        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>
-        <div className="h-10 bg-gray-200 rounded"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>
-        <div className="h-10 bg-gray-200 rounded"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>
-        <div className="h-10 bg-gray-200 rounded"></div>
-        <div className="h-10 bg-gray-200 rounded mt-4"></div>
-      </div>
-    </div>
-  </div>,
-  ssr: false
-});
+import Navbar from "@/components/navbar";
+import BlogList from "@/components/blogList";
 
 export const metadata = {
   title: 'Create AI-Generated Blog Posts',
@@ -29,12 +10,15 @@ export const metadata = {
   }
 };
 
-export default function Home() {
+export default async function Home() {
+
   return (
-    <main className="container mx-auto py-8">
-      <Suspense fallback={<div>Loading...</div>}>
-        <BlogPostForm />
-      </Suspense>
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-200">
+     <Navbar />
+     <BlogList />
     </main>
   );
 }
+
+
+

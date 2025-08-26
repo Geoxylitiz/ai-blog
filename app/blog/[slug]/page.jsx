@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { getBlogBySlug } from '@/lib/blogService';
+import { cache } from 'react';
 
 // Dynamic import with code splitting
 const BlogDetails = dynamic(() => import('@/components/BlogDetails'), {
@@ -18,8 +19,13 @@ const BlogDetails = dynamic(() => import('@/components/BlogDetails'), {
   </div>
 });
 
+// Cache the getBlogBySlug function
+const getCachedBlog = cache(async (slug) => {
+  return await getBlogBySlug(slug);
+})
+
 export async function generateMetadata({ params }) {
-  const blog = await getBlogBySlug(params.slug);
+  const blog = await getCachedBlog(params.slug);
   return {
     title: blog?.title || 'Blog Post',
     description: blog?.content?.substring(0, 160) || 'Generated blog post'
@@ -27,8 +33,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogPage({ params }) {
-  const blog = await getBlogBySlug(params.slug);
-
+  const blog = await getCachedBlog(params.slug);
+  
   return (
     <Suspense fallback={<div className="text-center py-10">Loading blog post...</div>}>
       <BlogDetails blog={blog} />
