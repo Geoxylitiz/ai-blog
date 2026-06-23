@@ -1,0 +1,72 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main # Triggers the workflow every time you push to main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Check out the code from the repo
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Log in to Docker Hub
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # 3. Build the Docker Image and push it to Docker Hub
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/sample:latest
+
+    # 4. SSH into EC2 and update the container
+    - name: SSH into EC2 and Deploy
+      uses: appleboy/ssh-action@v0.1.10
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
+        GEMINI: ${{ secrets.GEMINI }}
+        NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
+        REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+        REDIS_HOST: ${{ secrets.REDIS_HOST }}
+        REDIS_PORT: ${{ secrets.REDIS_PORT }}
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        envs: DOCKERHUB_USERNAME,MONGO_DB_URI,GEMINI,NEXT_PUBLIC_URL,REDIS_PASSWORD,REDIS_HOST,REDIS_PORT
+        script: |
+          cd /home/ubuntu/app
+          cat > .env << EOF
+          DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME
+          MONGO_DB_URI=$MONGO_DB_URI
+          GEMINI=$GEMINI
+          NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL
+          REDIS_PASSWORD=$REDIS_PASSWORD
+          REDIS_HOST=$REDIS_HOST
+          REDIS_PORT=$REDIS_PORT
+          EOF
+          cat > docker-compose.yml << EOF
+          version: '3.8'
+          services:
+            web-app:
+              image: $DOCKERHUB_USERNAME/sample:latest
+              env_file:
+                - .env
+              ports:
+                - "80:3000"
+              restart: always
+          EOF
+          docker-compose pull
+          docker-compose up -d
+

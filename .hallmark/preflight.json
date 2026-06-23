@@ -1,0 +1,8 @@
+{
+  "date": "2026-06-22",
+  "fontStack": "Inter via next/font in app/layout.js",
+  "palette": "No prior tokens; Tailwind utility colors in components",
+  "motion": "motion-cut; no motion dependency detected",
+  "spacing": "Tailwind defaults; no custom spacing scale",
+  "framework": "Next.js 13 app router with Tailwind CSS"
+}

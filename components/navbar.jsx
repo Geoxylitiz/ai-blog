@@ -2,18 +2,20 @@ import Link from 'next/link'
 
 export default function Navbar() {
     return (
-      <nav className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center">
+      <nav className="sticky top-0 z-20 border-b border-[color:var(--color-rule)] bg-[color:var(--color-panel)]/95 backdrop-blur">
+        <div className="page-wrap flex min-h-16 items-center justify-between gap-4 py-3">
         <Link
-          className="text-2xl font-bold text-gray-800"
+          className="font-[family-name:var(--font-display)] text-xl font-black tracking-tight text-[color:var(--color-ink)]"
           href="/"
-        >BLOGIFY</Link>
+        >Blogify</Link>
         
        <Link
           href="/create"
-          className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition"
+          className="action-button px-4"
         >
-          Create Blog
+          New draft
         </Link>
+        </div>
       </nav>
     )
 }

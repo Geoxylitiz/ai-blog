@@ -52,18 +52,29 @@ const BlogPostForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow rounded mt-10">
-      <h1 className="text-2xl font-bold mb-4 text-center">Blog Post Generator</h1>
+    <section className="page-wrap py-10 sm:py-14">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start">
+        <div className="lg:sticky lg:top-28">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-[color:var(--color-accent-strong)]">New draft</p>
+          <h1 className="font-[family-name:var(--font-display)] text-[length:var(--text-display)] font-black leading-[0.95] text-[color:var(--color-ink)] [overflow-wrap:anywhere]">
+            Shape the article before it writes.
+          </h1>
+          <p className="mt-5 max-w-lg text-lg leading-8 text-[color:var(--color-ink-soft)]">
+            Give the generator a precise topic, then set the editorial tone and target depth before Blogify drafts.
+          </p>
+        </div>
+    <div className="panel p-5 sm:p-7">
+      <h2 className="mb-5 text-2xl font-black text-[color:var(--color-ink)]">Draft settings</h2>
       
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded border border-red-300">
+        <div className="mb-5 rounded-[var(--radius-md)] border border-[color:var(--color-danger)] bg-[color:var(--color-danger-soft)] p-3 text-sm font-semibold text-[color:var(--color-danger)]">
           {error}
         </div>
       )}
       
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="topic" className="block mb-1 font-medium">Topic <span className="text-red-500">*</span></label>
+          <label htmlFor="topic" className="mb-2 block text-sm font-bold text-[color:var(--color-ink)]">Topic <span className="text-[color:var(--color-danger)]">*</span></label>
           <input
             type="text"
             id="topic"
@@ -72,59 +83,59 @@ const BlogPostForm = () => {
             onChange={handleChange}
             required
             disabled={isLoading}
-            className="w-full px-3 py-2 border rounded"
-            placeholder="e.g., Remote Work Tips"
+            className="control min-h-12 w-full px-4"
+            placeholder="Remote work rituals for small teams"
           />
         </div>
-        <div>
-          <label htmlFor="tone" className="block mb-1 font-medium">Tone</label>
-          <select
-            id="tone"
-            name="tone"
-            value={formData.tone}
-            onChange={handleChange}
-            disabled={isLoading}
-            className="w-full px-3 py-2 border rounded"
-          >
-            <option value="professional">Professional</option>
-            <option value="casual">Casual</option>
-            <option value="friendly">Friendly</option>
-          </select>
+        <div className="space-y-2">
+          <p className="text-sm font-bold text-[color:var(--color-ink)]">Tone</p>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {['professional', 'casual', 'friendly'].map((tone) => (
+              <label key={tone} className={`control cursor-pointer px-4 py-3 text-center text-sm font-bold capitalize ${formData.tone === tone ? 'border-[color:var(--color-accent)] bg-[color:var(--color-accent-soft)] text-[color:var(--color-accent-strong)]' : 'text-[color:var(--color-ink-soft)]'}`}>
+                <input
+                  type="radio"
+                  name="tone"
+                  value={tone}
+                  checked={formData.tone === tone}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  className="sr-only"
+                />
+                {tone}
+              </label>
+            ))}
+          </div>
         </div>
-        <div>
-          <label htmlFor="length" className="block mb-1 font-medium">Length</label>
-          <select
-            id="length"
-            name="length"
-            value={formData.length}
-            onChange={handleChange}
-            disabled={isLoading}
-            className="w-full px-3 py-2 border rounded"
-          >
-            <option value="short">Short</option>
-            <option value="medium">Medium</option>
-            <option value="long">Long</option>
-          </select>
+        <div className="space-y-2">
+          <p className="text-sm font-bold text-[color:var(--color-ink)]">Length</p>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {['short', 'medium', 'long'].map((length) => (
+              <label key={length} className={`control cursor-pointer px-4 py-3 text-center text-sm font-bold capitalize ${formData.length === length ? 'border-[color:var(--color-accent)] bg-[color:var(--color-accent-soft)] text-[color:var(--color-accent-strong)]' : 'text-[color:var(--color-ink-soft)]'}`}>
+                <input
+                  type="radio"
+                  name="length"
+                  value={length}
+                  checked={formData.length === length}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  className="sr-only"
+                />
+                {length}
+              </label>
+            ))}
+          </div>
         </div>
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full py-2 rounded transition flex justify-center items-center ${
-            isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
-          } text-white`}
+          className="action-button w-full px-5"
         >
-          {isLoading ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Generating...
-            </>
-          ) : 'Generate Blog Post'}
+          {isLoading ? 'Generating draft...' : 'Generate draft'}
         </button>
       </form>
     </div>
+      </div>
+    </section>
   );
 };
 
