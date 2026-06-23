@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  web-app:
+    image: ${DOCKERHUB_USERNAME}/sample:latest
+    env_file:
+      - .env
+    ports:
+      - "80:3000" # Maps port 80 (web traffic) on EC2 to port 3000 inside Docker
+    restart: always
